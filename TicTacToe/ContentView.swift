@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
+
         
         NavigationView {
         Home()
@@ -77,6 +78,19 @@ struct Home: View{
             
             checkWinner()
         })
+        
+        .alert(isPresented: $gameOver, content: {
+            
+            Alert(title: Text("Winner"), message: Text(msg), dismissButton: .destructive(Text("Play Again"), action: {
+                // Resets all data
+                withAnimation(Animation.easeIn(duration: 0.5)) {
+                    
+                    moves.removeAll()
+                    moves = Array (repeating: "", count: 9)
+                    isPlaying = true
+                }
+            }))
+        })
     }
     
     //Calculate width of grid
@@ -102,7 +116,7 @@ struct Home: View{
     }
 
 func checkMoves(player: String) -> Bool {
-    
+    // Horizontal Moves
     for contestant in stride(from: 0, to: 9, by: 3) {
         if moves[contestant] == player &&
            moves[contestant+1] == player &&
@@ -111,6 +125,27 @@ func checkMoves(player: String) -> Bool {
             return true
         }
     }
+    // Vertical Moves
+    for contestant in 0...2 {
+        if moves[contestant] == player &&
+           moves[contestant+3] == player &&
+           moves[contestant+6] == player {
+            
+            return true
+        }
+    }
+    
+    //Diagonal
+    if moves[0] == player && moves [4] == player && moves [8] == player {
+        
+        return true
+    }
+    
+    if moves [2] == player && moves [4] == && moves [6] == player {
+        
+        return true
+    }
+    
     return false
    }
 }
