@@ -10,7 +10,6 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
 
-        
         NavigationView {
         Home()
             .navigationTitle("Tic Tac Toe")
@@ -24,8 +23,8 @@ struct Home: View{
     //Number of moves we can make
     @State var moves: [String] = Array(repeating: "", count: 9)
     //To identify our current player
-    @State var isPlaying = false
-    @State var gameOver = true
+    @State var isPlaying = true
+    @State var gameOver = false
     @State var msg = ""
     
     var body: some View {
@@ -81,7 +80,7 @@ struct Home: View{
         
         .alert(isPresented: $gameOver, content: {
             
-            Alert(title: Text("Winner"), message: Text(msg), dismissButton: .destructive(Text("Play Again"), action: {
+            Alert(title: Text("Check It Out"), message: Text(msg), dismissButton: .destructive(Text("Play Again"), action: {
                 // Resets all data
                 withAnimation(Animation.easeIn(duration: 0.5)) {
                     
@@ -112,8 +111,21 @@ struct Home: View{
             
             msg = "Player O Won!!!"
             gameOver.toggle()
-         }
+         
+        } else {
+            
+            let status = moves.contains { (value) -> Bool in
+            
+                return value == ""
+        }
+        
+        if !status {
+            
+            msg = "Game Over Tied!!"
+            gameOver.toggle()
+        }
     }
+}
 
 func checkMoves(player: String) -> Bool {
     // Horizontal Moves
@@ -141,7 +153,7 @@ func checkMoves(player: String) -> Bool {
         return true
     }
     
-    if moves [2] == player && moves [4] == && moves [6] == player {
+    if moves [2] == player && moves [4] == player && moves [6] == player {
         
         return true
     }
